@@ -10,6 +10,10 @@ export interface ITimeSeriesOptions {
 
 export interface ITimeSeriesPresentationOptions {
     strokeStyle?: string;
+    /**
+     * Only supported for charts using fixed axes and linear interpolation.
+     */
+    lineDash?: [number, number];
     fillStyle?: string;
     lineWidth?: number;
     /**
@@ -53,6 +57,12 @@ export declare class TimeSeries {
     maxValue: number;
 
     /**
+     * Used to maintain a consistent lineDash if used.
+     */
+    lineDashOffset: number;
+    
+    /**
+     * 
      * Hide this <code>TimeSeries</code> object in the chart.
      */
     disabled: boolean;
