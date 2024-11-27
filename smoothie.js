@@ -160,6 +160,9 @@
         return Math.floor(position) + 0.5;
       }
     },
+    getLineLength: function(x, y) {
+      return Math.sqrt(x * x + y * y);
+    },
   };
 
   /**
@@ -196,6 +199,7 @@
     this.data = [];
     this.maxValue = Number.NaN; // The maximum value ever seen in this TimeSeries.
     this.minValue = Number.NaN; // The minimum value ever seen in this TimeSeries.
+    this.lineDashOffset = 0; // Used to maintain a consistent lineDash if used.
   };
 
   /**
@@ -280,7 +284,7 @@
     this.minValue = isNaN(this.minValue) ? value : Math.min(this.minValue, value);
   };
 
-  TimeSeries.prototype.dropOldData = function(oldestValidTime, maxDataSetLength) {
+  TimeSeries.prototype.dropOldData = function(oldestValidTime, maxDataSetLength, timeToXPosition, valueToYPosition, lineWidthMaybeZero, lineDash) {
     // We must always keep one expired data point as we need this to draw the
     // line that comes into the chart from the left, but any points prior to that can be removed.
     var removeCount = 0;
@@ -288,6 +292,22 @@
       removeCount++;
     }
     if (removeCount !== 0) {
+      if (lineDash) {
+        for (var i = 0; i < removeCount; i++) {
+          const pointOne = this.data[i];
+          const pointTwo = this.data[i + 1];
+          const xDiff = timeToXPosition(pointTwo[0], lineWidthMaybeZero) - timeToXPosition(pointOne[0], lineWidthMaybeZero);
+          const yDiff = valueToYPosition(pointTwo[1], lineWidthMaybeZero) - valueToYPosition(pointOne[1], lineWidthMaybeZero);
+          const removedLineLength = Util.getLineLength(xDiff, yDiff);
+          this.lineDashOffset = Number((removedLineLength + this.lineDashOffset).toFixed(2));
+
+          // Reset lineDashOffset to zero where possible.
+          const totalDashLength = lineDash[0] + lineDash[1];
+          if (this.lineDashOffset % totalDashLength === 0) {
+            this.lineDashOffset = 0;
+          }
+        }
+      }
       this.data.splice(0, removeCount);
     }
   };
@@ -975,19 +995,18 @@
     // For each data set...
     for (var d = 0; d < this.seriesSet.length; d++) {
       var timeSeries = this.seriesSet[d].timeSeries,
-          dataSet = timeSeries.data;
+          dataSet = timeSeries.data,
+          lineWidthMaybeZero = drawStroke ? seriesOptions.lineWidth : 0,
+          seriesOptions = this.seriesSet[d].options;
 
       // Delete old data that's moved off the left of the chart.
-      timeSeries.dropOldData(oldestValidTime, chartOptions.maxDataSetLength);
+      timeSeries.dropOldData(oldestValidTime, chartOptions.maxDataSetLength, timeToXPosition, valueToYPosition, lineWidthMaybeZero, seriesOptions.lineDash);
       if (dataSet.length <= 1 || timeSeries.disabled) {
           continue;
       }
       context.save();
 
-      var seriesOptions = this.seriesSet[d].options,
-          // Keep in mind that `context.lineWidth = 0` doesn't actually set it to `0`.
-          drawStroke = seriesOptions.strokeStyle && seriesOptions.strokeStyle !== 'none',
-          lineWidthMaybeZero = drawStroke ? seriesOptions.lineWidth : 0;
+      var drawStroke = seriesOptions.strokeStyle && seriesOptions.strokeStyle !== 'none';
 
       // Draw the line...
       context.beginPath();
@@ -1050,6 +1069,10 @@
       if (drawStroke) {
         context.lineWidth = seriesOptions.lineWidth;
         context.strokeStyle = seriesOptions.strokeStyle;
+        if (seriesOptions.lineDash) {
+          context.setLineDash(seriesOptions.lineDash);
+          context.lineDashOffset = timeSeries.lineDashOffset;
+        }
         context.stroke();
       }
 
