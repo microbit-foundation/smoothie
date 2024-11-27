@@ -1,3 +1,11 @@
+# Heads up
+
+This is a fork of [smoothie](https://github.com/joewalnes/smoothie) for micro:bit CreateAI. It's otherwise unsupported by the Foundation. Changes:
+
+- Added support for the `lineDash` property (charts using a fixed y-axis and linear interpolation only).
+
+# Original documentation
+
 [![npm version](https://img.shields.io/npm/v/smoothie.svg)](https://www.npmjs.com/package/smoothie)
 
 *Smoothie Charts* is a really small charting library designed for _live

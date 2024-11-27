@@ -1,20 +1,15 @@
 {
-  "name": "smoothie",
-  "version": "1.36.1",
+  "name": "@microbit/smoothie",
+  "version": "1.37.0-microbit.1",
   "description": "Smoothie Charts: smooooooth JavaScript charts for realtime streaming data",
   "main": "./smoothie.js",
   "types": "./smoothie.d.ts",
-  "directories": {
-    "doc": "docs",
-    "example": "examples",
-    "builder": "builder"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/joewalnes/smoothie.git"
+    "url": "git://github.com/microbit-foundation/smoothie.git"
   },
   "keywords": [
     "charts",
@@ -25,7 +20,7 @@
     "time-series",
     "responsive"
   ],
-  "bugs": "https://github.com/joewalnes/smoothie/issues",
+  "bugs": "https://github.com/microbit-foundation/smoothie/issues",
   "author": {
     "name": "Joe Walnes",
     "url": "https://joewalnes.com/"
