@@ -1,6 +1,6 @@
 {
   "name": "@microbit/smoothie",
-  "version": "1.37.0-microbit.1",
+  "version": "0.0.0",
   "description": "Smoothie Charts: smooooooth JavaScript charts for realtime streaming data",
   "main": "./smoothie.js",
   "types": "./smoothie.d.ts",
