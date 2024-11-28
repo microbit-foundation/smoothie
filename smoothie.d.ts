@@ -11,9 +11,10 @@ export interface ITimeSeriesOptions {
 export interface ITimeSeriesPresentationOptions {
     strokeStyle?: string;
     /**
+     * As per https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
      * Only supported for charts using fixed axes and linear interpolation.
      */
-    lineDash?: [number, number];
+    lineDash?: number[];
     fillStyle?: string;
     lineWidth?: number;
     /**
