@@ -13,7 +13,7 @@ export interface ITimeSeriesPresentationOptions {
     /**
      * Only supported for charts using fixed axes and linear interpolation.
      */
-    lineDash?: [number, number];
+    lineDash?: number[];
     fillStyle?: string;
     lineWidth?: number;
     /**

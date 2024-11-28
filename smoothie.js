@@ -302,7 +302,7 @@
           this.lineDashOffset = Number((removedLineLength + this.lineDashOffset).toFixed(2));
 
           // Reset lineDashOffset to zero where possible.
-          const totalDashLength = lineDash[0] + lineDash[1];
+          const totalDashLength = lineDash.reduce((acc, curr) => acc + curr, 0);
           if (this.lineDashOffset % totalDashLength === 0) {
             this.lineDashOffset = 0;
           }
