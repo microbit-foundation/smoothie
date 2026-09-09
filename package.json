@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/microbit-foundation/smoothie.git"
+    "url": "git+https://github.com/microbit-foundation/smoothie.git"
   },
   "keywords": [
     "charts",
